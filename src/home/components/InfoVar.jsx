@@ -22,7 +22,7 @@ function InfoVar({id, username, isRefresh, onState = f => f}) {
 
     // Get requests of Host
     useEffect(() => {
-        fetch(`https://https://alva-chats-server.mongo.cosmos.azure.com/requests/${id}`, { method: 'GET' })
+        fetch(`https://db-alva-chats.us-east-2.elasticbeanstalk.com/requests/${id}`, { method: 'GET' })
             .then(response => response.json())
             .then(data => {
                 setIsRequests(data.requests)

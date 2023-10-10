@@ -32,7 +32,7 @@ function MessageVar(
         }
       
         try {
-          const response = await fetch(`https://alva-chats-server.mongo.cosmos.azure.com/send-message/${id}`, {
+          const response = await fetch(`https://db-alva-chats.us-east-2.elasticbeanstalk.com/send-message/${id}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

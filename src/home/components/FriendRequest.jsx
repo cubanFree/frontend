@@ -13,7 +13,7 @@ function FriendRequest({id, isRefresh, onRefresh = f => f}) {
     const deleteRequest = (event, idContact) => {
         event.preventDefault();
                             
-        fetch(`https://alva-chats-server.mongo.cosmos.azure.com/delete-request/${id}`, {
+        fetch(`https://db-alva-chats.us-east-2.elasticbeanstalk.com/delete-request/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ function FriendRequest({id, isRefresh, onRefresh = f => f}) {
     const acceptRequest = (event, idContact) => {
         event.preventDefault()
 
-        fetch(`https://alva-chats-server.mongo.cosmos.azure.com/add-contact/${id}`, 
+        fetch(`https://db-alva-chats.us-east-2.elasticbeanstalk.com/add-contact/${id}`, 
         {
             method: 'PATCH',
             headers: {
@@ -100,7 +100,7 @@ function FriendRequest({id, isRefresh, onRefresh = f => f}) {
 
     // Get requests
     React.useEffect(() => {
-        fetch(`https://alva-chats-server.mongo.cosmos.azure.com/requests/${id}`, { method: 'GET' })
+        fetch(`https://db-alva-chats.us-east-2.elasticbeanstalk.com/requests/${id}`, { method: 'GET' })
         .then(response => response.json())
         .then(data => {
             setRequests(data.requests)
