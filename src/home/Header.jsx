@@ -41,7 +41,7 @@ function Header() {
     const signUp = (event) => {
         event.preventDefault()
 
-        fetch('https://alva-chats-server.mongo.cosmos.azure.com/register', {
+        fetch('https://db-alva-chats.us-east-2.elasticbeanstalk.com/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ function Header() {
     const signIn = (event) => {
         event.preventDefault()
       
-        fetch('https://alva-chats-server.mongo.cosmos.azure.com/login', {
+        fetch('https://db-alva-chats.us-east-2.elasticbeanstalk.com/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
