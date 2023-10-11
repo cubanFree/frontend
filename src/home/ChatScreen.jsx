@@ -25,7 +25,7 @@ export async function OpenChat(
         return;
       }
 
-      const response = await fetch(`https://db-alva-chats.us-east-2.elasticbeanstalk.com/open-chat/${id}`, {
+      const response = await fetch(`https://chats-backend-api.vercel.app/open-chat/${id}`, {
           method: 'PATCH',
           headers: {
               'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ function ChatScreen() {
     }
 
     // Realiza la solicitud HTTP para obtener los datos del usuario
-    fetch(`https://db-alva-chats.us-east-2.elasticbeanstalk.com/chat/${userId}`, { method: 'GET' })
+    fetch(`https://chats-backend-api.vercel.app/chat/${userId}`, { method: 'GET' })
       .then(response => response.json())
       .then(data => {
         setUserData({id: data._id, username: data.username});

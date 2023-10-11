@@ -32,7 +32,7 @@ function MessageVar(
         }
       
         try {
-          const response = await fetch(`https://db-alva-chats.us-east-2.elasticbeanstalk.com/send-message/${id}`, {
+          const response = await fetch(`https://chats-backend-api.vercel.app/send-message/${id}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

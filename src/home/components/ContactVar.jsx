@@ -33,8 +33,8 @@ function ContactVar(
       
           // Realizar ambas solicitudes simultáneamente
           const [userDataResponse, requestsSendsResponse] = await Promise.all([
-            fetch(`https://db-alva-chats.us-east-2.elasticbeanstalk.com/search/${username}`, { method: 'GET' }),
-            fetch(`https://db-alva-chats.us-east-2.elasticbeanstalk.com/requests-sends/${id}`, { method: 'GET' })
+            fetch(`https://chats-backend-api.vercel.app/search/${username}`, { method: 'GET' }),
+            fetch(`https://chats-backend-api.vercel.app/requests-sends/${id}`, { method: 'GET' })
           ]);
       
           // Verificar el resultado de la búsqueda de usuarios en la base de datos y establecer en userOnChats
@@ -63,7 +63,7 @@ function ContactVar(
     const sendInvitation = (event, idContact) => {
         event.preventDefault()
 
-        fetch(`https://db-alva-chats.us-east-2.elasticbeanstalk.com/invite/${id}`, 
+        fetch(`https://chats-backend-api.vercel.app/invite/${id}`, 
         { 
             method: 'PATCH' ,
             headers: {
@@ -91,7 +91,7 @@ function ContactVar(
     const cancelInvitation = (event, idContact) => {
         event.preventDefault()
 
-        fetch(`https://db-alva-chats.us-east-2.elasticbeanstalk.com/cancel-request/${id}`, {
+        fetch(`https://chats-backend-api.vercel.app/cancel-request/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ function ContactVar(
 
     // Get contacts
     useEffect(() => {
-        fetch(`https://db-alva-chats.us-east-2.elasticbeanstalk.com/contacts/${id}`, { method: 'GET' })
+        fetch(`https://chats-backend-api.vercel.app/contacts/${id}`, { method: 'GET' })
         .then(response => response.json())
         .then(data => {
             setContacts(data.contacts)

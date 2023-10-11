@@ -41,7 +41,7 @@ function Header() {
     const signUp = (event) => {
         event.preventDefault()
 
-        fetch('https://db-alva-chats.us-east-2.elasticbeanstalk.com/register', {
+        fetch('https://chats-backend-api.vercel.app/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ function Header() {
     const signIn = (event) => {
         event.preventDefault()
       
-        fetch('https://db-alva-chats.us-east-2.elasticbeanstalk.com/login', {
+        fetch('https://chats-backend-api.vercel.app/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
