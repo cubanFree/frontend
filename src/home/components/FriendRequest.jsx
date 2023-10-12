@@ -13,7 +13,7 @@ function FriendRequest({id, isRefresh, onRefresh = f => f}) {
     const deleteRequest = (event, idContact) => {
         event.preventDefault();
                             
-        fetch(`https://chats-backend-api.vercel.app/delete-request/${id}`, {
+        fetch(`mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/delete-request/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ function FriendRequest({id, isRefresh, onRefresh = f => f}) {
     const acceptRequest = (event, idContact) => {
         event.preventDefault()
 
-        fetch(`https://chats-backend-api.vercel.app/add-contact/${id}`, 
+        fetch(`mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/add-contact/${id}`, 
         {
             method: 'PATCH',
             headers: {
@@ -100,7 +100,7 @@ function FriendRequest({id, isRefresh, onRefresh = f => f}) {
 
     // Get requests
     React.useEffect(() => {
-        fetch(`https://chats-backend-api.vercel.app/requests/${id}`, { method: 'GET' })
+        fetch(`mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/requests/${id}`, { method: 'GET' })
         .then(response => response.json())
         .then(data => {
             setRequests(data.requests)

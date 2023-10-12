@@ -25,7 +25,7 @@ export async function OpenChat(
         return;
       }
 
-      const response = await fetch(`https://chats-backend-api.vercel.app/open-chat/${id}`, {
+      const response = await fetch(`mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/open-chat/${id}`, {
           method: 'PATCH',
           headers: {
               'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ function ChatScreen() {
     }
 
     // Realiza la solicitud HTTP para obtener los datos del usuario
-    fetch(`https://chats-backend-api.vercel.app/chat/${userId}`, { method: 'GET' })
+    fetch(`mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/chat/${userId}`, { method: 'GET' })
       .then(response => response.json())
       .then(data => {
         setUserData({id: data._id, username: data.username});

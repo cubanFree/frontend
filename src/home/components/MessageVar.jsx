@@ -32,7 +32,7 @@ function MessageVar(
         }
       
         try {
-          const response = await fetch(`https://chats-backend-api.vercel.app/send-message/${id}`, {
+          const response = await fetch(`mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/send-message/${id}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

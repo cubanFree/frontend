@@ -22,7 +22,7 @@ function InfoVar({id, username, isRefresh, onState = f => f}) {
 
     // Get requests of Host
     useEffect(() => {
-        fetch(`https://chats-backend-api.vercel.app/requests/${id}`, { method: 'GET' })
+        fetch(`mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/requests/${id}`, { method: 'GET' })
             .then(response => response.json())
             .then(data => {
                 setIsRequests(data.requests)
