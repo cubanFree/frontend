@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import {toast, Toaster} from 'react-hot-toast';
 import FriendRequest from './components/FriendRequest';
 
+const URL_TARGET = 'http://localhost:5000'
+
 // open chat function
 export async function OpenChat(
     { 
@@ -25,7 +27,7 @@ export async function OpenChat(
         return;
       }
 
-      const response = await fetch(`mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/open-chat/${id}`, {
+      const response = await fetch(`${URL_TARGET}/open-chat/${id}`, {
           method: 'PATCH',
           headers: {
               'Content-Type': 'application/json',
@@ -70,7 +72,8 @@ function ChatScreen() {
   const [stateChange, setStateChange] = useState( 'contacts' );
   const [isRefresh, setIsRefresh] = useState( false );
   const [chat, setChat] = useState({ username: '', chats: [] }); // guarda todo el content (body, date, _id), elfrom y username
-  
+  const [isOpenChat, setIsOpenChat] = useState(false);
+
   const navigate = useNavigate();
   const userId = localStorage.getItem( 'userId' );
   const containerRef = useRef( null );
@@ -85,7 +88,7 @@ function ChatScreen() {
     }
 
     // Realiza la solicitud HTTP para obtener los datos del usuario
-    fetch(`mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/chat/${userId}`, { method: 'GET' })
+    fetch(`${URL_TARGET}/chat/${userId}`, { method: 'GET' })
       .then(response => response.json())
       .then(data => {
         setUserData({id: data._id, username: data.username});
@@ -98,14 +101,15 @@ function ChatScreen() {
   }, [userId]);
 
   return (
-    <div className='bg-gray-800 text-gray-300 w-full h-[100vh] p-0 m-0'>
+    <div className='bg-gray-800 text-gray-300 w-full md:h-[100vh] overflow-hidden h-screen p-0 m-0'>
       {userData ? ( // if userData exists
-        <div className='flex bg-gray-900'>
+        <div className='md:flex block bg-gray-900'>
 
           {/* Screen InfoVar */}
           <InfoVar 
             isRefresh={isRefresh} 
             username={userData.username} 
+            isOpenChat={isOpenChat}
             id={userId} 
             onState={(flag) => setStateChange(flag)}
           />
@@ -116,10 +120,12 @@ function ChatScreen() {
             stateChange === 'contacts' && <ContactVar 
                                             onRefresh={() => setIsRefresh(!isRefresh)} 
                                             isRefresh={isRefresh} 
+                                            isOpenChat={isOpenChat}
                                             id={userId} 
                                             usernameHost={userData.username}
                                             containerRef={containerRef} 
                                             onChat={setChat}
+                                            onOpenChat={setIsOpenChat}
                                           />
           }
           {
@@ -135,8 +141,10 @@ function ChatScreen() {
           <MessageVar 
             onRefresh={() => setIsRefresh(!isRefresh)} 
             isRefresh={isRefresh} 
+            isOpenChat={isOpenChat}
             id={userId} 
             onChat={setChat} 
+            onOpenChat={setIsOpenChat}
             containerRef={containerRef} 
             {...chat}
           />

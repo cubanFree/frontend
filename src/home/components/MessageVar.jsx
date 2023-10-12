@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react';
-import { User, ScrollShadow, Input, Button, Image, Skeleton } from '@nextui-org/react';
+import { User, ScrollShadow, Input, Button, Image } from '@nextui-org/react';
 import { AiOutlineSend } from 'react-icons/ai';
+import { BsArrowLeftShort } from 'react-icons/bs';
 import bg_chat from '../../assets/bgChat.jpeg';
 import toast from 'react-hot-toast';
 import LoopMessage from './LoopMessage';
 import { OpenChat } from '../ChatScreen';
+
+const URL_TARGET = 'http://localhost:5000'
 
 function MessageVar(
         {
@@ -12,9 +15,11 @@ function MessageVar(
             username, 
             chats, 
             isRefresh, 
+            isOpenChat,
             containerRef, 
             onRefresh = f => f, 
-            onChat = f => f
+            onChat = f => f,
+            onOpenChat = f => f
         }
     ) {
 
@@ -32,7 +37,7 @@ function MessageVar(
         }
       
         try {
-          const response = await fetch(`mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/send-message/${id}`, {
+          const response = await fetch(`${URL_TARGET}/send-message/${id}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -74,35 +79,30 @@ function MessageVar(
     }, [isRefresh]);
 
   return (
-    <div className=' text-gray-300 w-full h-full '>
+    <div className={'text-gray-300 md:col-12 md:block h-screen ' + (isOpenChat ? 'block' : 'hidden')}>
 
         {/* Header */}
         <div 
-            className='bg-gray-800 p-4 border-b-1 border-gray-600 sticky top-0 z-20'>
-                {username
-                    ? 
-                        <User
-                            name={username}
-                            description="Product Designer"
-                            avatarProps={{
-                                src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
-                                size: "md",
-                            }}
-                            className='w-full flex justify-start font-semibold hover:bg-gray-800 cursor-pointer p-2'
-                            isFocusable={false}
-                        />
-                    :
-                        <div className="max-w-[300px] w-full flex items-center gap-3">
-                            <div>
-                                <Skeleton className="flex rounded-full w-[2.5rem] h-[2.5rem] bg-gray-600"/>
-                            </div>  
-                            <div 
-                                className="w-full flex flex-col gap-2">
-                                    <Skeleton className="h-2 w-4/5 rounded-lg bg-gray-600"/>
-                                    <Skeleton className="h-2 w-3/5 rounded-lg bg-gray-600"/>
-                            </div>
-                        </div>
-                }
+            className={'bg-gray-800 p-4 border-b-1 border-gray-600 sticky top-0 z-20 flex justify-center items-center gap-4' + (username === '' ? ' hidden' : '')}>
+                <div 
+                    className='bg-gray-600 p-1 rounded-full md:hidden'
+                    onClick={(e) => {
+                        e.preventDefault();
+                        onChat({ username: '', chats: [] });
+                        onOpenChat(false);
+                    }}>
+                        <BsArrowLeftShort size={25}/>
+                </div>
+                <User
+                    name={username}
+                    description="Product Designer"
+                    avatarProps={{
+                        src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+                        size: "md",
+                    }}
+                    className='w-full flex justify-start font-semibold hover:bg-gray-800 cursor-pointer p-2'
+                    isFocusable={false}
+                />
         </div>
 
         {/* Body */}
@@ -112,7 +112,7 @@ function MessageVar(
                 alt="bg_chat" 
                 className='z-0 object-cover min-h-[100vh] w-full blur-sm' 
             />
-            <div className='p-[2rem] md:px-[10rem] overflow-auto snap-y absolute top-0 w-full'>
+            <div className='pb-[20vh] xl:px-[15rem] px-[1rem] overflow-auto snap-y absolute top-0 w-full h-screen'>
                 {chats.length > 0 
                     ? (
                         <ScrollShadow 

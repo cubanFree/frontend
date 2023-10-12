@@ -4,14 +4,18 @@ import { HiOutlineRefresh } from 'react-icons/hi'
 import { Toaster, toast } from 'react-hot-toast'
 import { OpenChat } from '../ChatScreen'
 
+const URL_TARGET = 'http://localhost:5000'
+
 function ContactVar(
         {
             id, 
             usernameHost, 
             isRefresh, 
+            isOpenChat,
             containerRef, 
             onRefresh = f => f, 
-            onChat = f => f
+            onChat = f => f,
+            onOpenChat = f => f
         }
     ) {
 
@@ -33,8 +37,8 @@ function ContactVar(
       
           // Realizar ambas solicitudes simultáneamente
           const [userDataResponse, requestsSendsResponse] = await Promise.all([
-            fetch(`mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/search/${username}`, { method: 'GET' }),
-            fetch(`mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/requests-sends/${id}`, { method: 'GET' })
+            fetch(`${URL_TARGET}/search/${username}`, { method: 'GET' }),
+            fetch(`${URL_TARGET}/requests-sends/${id}`, { method: 'GET' })
           ]);
       
           // Verificar el resultado de la búsqueda de usuarios en la base de datos y establecer en userOnChats
@@ -63,7 +67,7 @@ function ContactVar(
     const sendInvitation = (event, idContact) => {
         event.preventDefault()
 
-        fetch(`mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/invite/${id}`, 
+        fetch(`${URL_TARGET}/invite/${id}`, 
         { 
             method: 'PATCH' ,
             headers: {
@@ -91,7 +95,7 @@ function ContactVar(
     const cancelInvitation = (event, idContact) => {
         event.preventDefault()
 
-        fetch(`mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/cancel-request/${id}`, {
+        fetch(`${URL_TARGET}/cancel-request/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -128,35 +132,37 @@ function ContactVar(
                     e.preventDefault();
                     localStorage.setItem('idContact', idContact)
                     OpenChat({id, containerRef, onChat, onRefresh})
-                }}
-                >
-                <User   
-                    name={username}
-                    avatarProps={{
-                        src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
-                        size: "lg",
-                    }}
-                    isFocusable={false}
-                    
-                />
-                {!isOnContact &&
-                        (!isRequestSend
-                            ?
-                                <Button 
-                                    className='bg-yellow-600 font-semibold' 
-                                    size='sm'
-                                    onClick={(e) => sendInvitation(e, idContact)}>
-                                        Invite
-                                </Button>
-                            : 
-                                <Button 
-                                    className='bg-yellow-600 font-semibold' 
-                                    size='sm'
-                                    onClick={(e) => cancelInvitation(e, idContact)}>
-                                        Cancel request
-                                </Button>
-                        )
-                }
+                    setTimeout(() => {
+                        onOpenChat(true)
+                    }, 200)
+                }}>
+                    <User   
+                        name={username}
+                        avatarProps={{
+                            src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+                            size: "lg",
+                        }}
+                        isFocusable={false}
+                        
+                    />
+                    {!isOnContact &&
+                            (!isRequestSend
+                                ?
+                                    <Button 
+                                        className='bg-yellow-600 font-semibold' 
+                                        size='sm'
+                                        onClick={(e) => sendInvitation(e, idContact)}>
+                                            Invite
+                                    </Button>
+                                : 
+                                    <Button 
+                                        className='bg-yellow-600 font-semibold' 
+                                        size='sm'
+                                        onClick={(e) => cancelInvitation(e, idContact)}>
+                                            Cancel request
+                                    </Button>
+                            )
+                    }
             </div>
         )
     }
@@ -170,7 +176,7 @@ function ContactVar(
 
     // Get contacts
     useEffect(() => {
-        fetch(`mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/contacts/${id}`, { method: 'GET' })
+        fetch(`${URL_TARGET}/contacts/${id}`, { method: 'GET' })
         .then(response => response.json())
         .then(data => {
             setContacts(data.contacts)
@@ -195,7 +201,7 @@ function ContactVar(
     }, [isRefresh, searchContact === ''])
 
   return (
-    <div className='bg-gray-800 text-gray-300 sm:min-w-[20rem] md:min-w-[25rem] h-[100vh] p-4 flex flex-col gap-4 rounded-tl-2xl border-r-1 border-gray-600'>
+    <div className={'bg-gray-800 text-gray-300 col-3 col-s-12 p-4 flex flex-col gap-4 rounded-tl-2xl border-r-1 border-gray-600 md:block' + (isOpenChat ? ' hidden' : '')}>
         {/* Header */}
         <div className='sticky top-0 flex flex-col gap-4'>
             <span className='font-bold text-xl'>

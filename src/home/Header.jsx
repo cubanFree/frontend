@@ -16,6 +16,8 @@ import { FiHelpCircle } from 'react-icons/fi';
 import { Toaster, toast } from 'react-hot-toast';
 import image from '../assets/fondox.png'
 
+const URL_TARGET = 'http://localhost:5000'
+
 const Logo = () => {
     return (
         <svg fill="none" height="36" viewBox="0 0 32 32" width="36">
@@ -41,7 +43,7 @@ function Header() {
     const signUp = (event) => {
         event.preventDefault()
 
-        fetch('mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/register', {
+        fetch(`${URL_TARGET}/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -67,7 +69,7 @@ function Header() {
     const signIn = (event) => {
         event.preventDefault()
       
-        fetch('mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/login', {
+        fetch(`${URL_TARGET}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

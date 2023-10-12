@@ -5,6 +5,8 @@ import { AiOutlineClose } from "react-icons/ai";
 import { Toaster, toast } from 'react-hot-toast';
 import { v4 as uuid } from 'uuid';
 
+const URL_TARGET = 'http://localhost:5000'
+
 function FriendRequest({id, isRefresh, onRefresh = f => f}) {
 
     const [getRequests, setRequests] = React.useState([])
@@ -13,7 +15,7 @@ function FriendRequest({id, isRefresh, onRefresh = f => f}) {
     const deleteRequest = (event, idContact) => {
         event.preventDefault();
                             
-        fetch(`mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/delete-request/${id}`, {
+        fetch(`${URL_TARGET}/delete-request/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -40,7 +42,7 @@ function FriendRequest({id, isRefresh, onRefresh = f => f}) {
     const acceptRequest = (event, idContact) => {
         event.preventDefault()
 
-        fetch(`mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/add-contact/${id}`, 
+        fetch(`${URL_TARGET}/add-contact/${id}`, 
         {
             method: 'PATCH',
             headers: {
@@ -100,7 +102,7 @@ function FriendRequest({id, isRefresh, onRefresh = f => f}) {
 
     // Get requests
     React.useEffect(() => {
-        fetch(`mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/requests/${id}`, { method: 'GET' })
+        fetch(`${URL_TARGET}/requests/${id}`, { method: 'GET' })
         .then(response => response.json())
         .then(data => {
             setRequests(data.requests)
@@ -116,7 +118,7 @@ function FriendRequest({id, isRefresh, onRefresh = f => f}) {
     }, [isRefresh])
 
   return (
-    <div className='bg-gray-800 text-gray-300 sm:min-w-[20rem] md:min-w-[25rem] h-[100vh] p-4 flex flex-col gap-4 rounded-tl-2xl border-r-1 border-gray-600'>
+    <div className='bg-gray-800 text-gray-300 col-3 h-[100vh] p-4 flex flex-col gap-4 rounded-tl-2xl border-r-1 border-gray-600'>
         {/* Header */}
         <div className='sticky top-0 flex justify-between'>
             <span className='font-bold text-xl'>

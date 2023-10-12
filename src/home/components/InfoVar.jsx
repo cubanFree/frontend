@@ -5,7 +5,9 @@ import { BsKey, BsLaptop, BsChatLeftTextFill } from 'react-icons/bs';
 import { FaUserFriends } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
-function InfoVar({id, username, isRefresh, onState = f => f}) {
+const URL_TARGET = 'http://localhost:5000'
+
+function InfoVar({id, username, isRefresh, isOpenChat, onState = f => f}) {
 
     const [avatar, setAvatar] = React.useState(avatarDefault)
     const [isRequests, setIsRequests] = React.useState([])
@@ -22,7 +24,7 @@ function InfoVar({id, username, isRefresh, onState = f => f}) {
 
     // Get requests of Host
     useEffect(() => {
-        fetch(`mongodb+srv://alva:W3McwUx5hAZInXU3@alva.nmib9zn.mongodb.net/requests/${id}`, { method: 'GET' })
+        fetch(`${URL_TARGET}/requests/${id}`, { method: 'GET' })
             .then(response => response.json())
             .then(data => {
                 setIsRequests(data.requests)
@@ -33,8 +35,8 @@ function InfoVar({id, username, isRefresh, onState = f => f}) {
     }, [isRefresh, id])
 
   return (
-    <div className='p-3 h-[100vh] min-w-[5rem] flex flex-col justify-between items-center'>
-            <div className='flex flex-col justify-center items-center gap-1'>
+    <div className={'p-3 col-1 col-s-12 flex md:flex-col md:flex justify-between items-center md:h-[100vh]' + (isOpenChat ? ' hidden' : '')}>
+            <div className='flex md:flex-col justify-center items-center md:gap-1 gap-5'>
 
                 {/* Contacts */}
                 <Link 
@@ -72,7 +74,7 @@ function InfoVar({id, username, isRefresh, onState = f => f}) {
             </div>
 
             {/* Info user button */}
-            <Dropdown placement="bottom-start">
+            <Dropdown placement="bottom-start" className='flex justify-center items-center'>
                 <DropdownTrigger>
                     <Avatar
                         as="button"
