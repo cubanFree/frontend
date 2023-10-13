@@ -1,11 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
-import { Spinner } from '@nextui-org/react';
 import InfoVar from './components/InfoVar';
 import ContactVar from './components/ContactVar';
 import MessageVar from './components/MessageVar';
 import { useNavigate } from 'react-router-dom';
 import {toast, Toaster} from 'react-hot-toast';
 import FriendRequest from './components/FriendRequest';
+import LoadingVar from './LoadingVar';
 
 const URL_TARGET = 'http://localhost:5000'
 
@@ -62,7 +62,7 @@ export async function OpenChat(
 // scroll down function
 export function ScrollDown ({containerRef}) {
   if (containerRef.current) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    containerRef.current.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'smooth' })
   }
 }
 
@@ -73,6 +73,8 @@ function ChatScreen() {
   const [isRefresh, setIsRefresh] = useState( false );
   const [chat, setChat] = useState({ username: '', chats: [] }); // guarda todo el content (body, date, _id), elfrom y username
   const [isOpenChat, setIsOpenChat] = useState(false);
+  const [isLogout, setIsLogout] = useState(false);
+  const [isLoadingMessages, setIsLoadingMessages] = useState(false);
 
   const navigate = useNavigate();
   const userId = localStorage.getItem( 'userId' );
@@ -102,65 +104,62 @@ function ChatScreen() {
 
   return (
     <div className='bg-gray-800 text-gray-300 w-full md:h-[100vh] overflow-hidden h-screen p-0 m-0'>
-      {userData ? ( // if userData exists
-        <div className='md:flex block bg-gray-900'>
+      {userData || isLogout
+        ? ( // if userData exists
+          <div className='md:flex block bg-gray-900'>
 
-          {/* Screen InfoVar */}
-          <InfoVar 
-            isRefresh={isRefresh} 
-            username={userData.username} 
-            isOpenChat={isOpenChat}
-            id={userId} 
-            onState={(flag) => setStateChange(flag)}
-          />
+            {/* Screen InfoVar */}
+            <InfoVar 
+              isRefresh={isRefresh} 
+              username={userData.username} 
+              isOpenChat={isOpenChat}
+              id={userId} 
+              onState={(flag) => setStateChange(flag)}
+              onLogout={() => setIsLogout}
+            />
 
-          {/* Screen ContactVar */}
-          {
-            // State Contacts
-            stateChange === 'contacts' && <ContactVar 
-                                            onRefresh={() => setIsRefresh(!isRefresh)} 
-                                            isRefresh={isRefresh} 
-                                            isOpenChat={isOpenChat}
-                                            id={userId} 
-                                            usernameHost={userData.username}
-                                            containerRef={containerRef} 
-                                            onChat={setChat}
-                                            onOpenChat={setIsOpenChat}
-                                          />
-          }
-          {
-            // State Friends Requests
-            stateChange === 'friends-requests' && <FriendRequest 
-                                                    onRefresh={() => setIsRefresh(!isRefresh)} 
-                                                    isRefresh={isRefresh} 
-                                                    id={userId}
-                                                  />
-          }
+            {/* Screen ContactVar */}
+            {
+              // State Contacts
+              stateChange === 'contacts' && <ContactVar 
+                                              onRefresh={() => setIsRefresh(!isRefresh)} 
+                                              isRefresh={isRefresh} 
+                                              isOpenChat={isOpenChat}
+                                              id={userId} 
+                                              usernameHost={userData.username}
+                                              containerRef={containerRef} 
+                                              onChat={setChat}
+                                              onOpenChat={setIsOpenChat}
+                                              onLoadingMessages={setIsLoadingMessages}
+                                            />
+            }
+            {
+              // State Friends Requests
+              stateChange === 'friends-requests' && <FriendRequest 
+                                                      onRefresh={() => setIsRefresh(!isRefresh)} 
+                                                      isRefresh={isRefresh} 
+                                                      id={userId}
+                                                    />
+            }
 
-          {/* Screen MessagesVar */}
-          <MessageVar 
-            onRefresh={() => setIsRefresh(!isRefresh)} 
-            isRefresh={isRefresh} 
-            isOpenChat={isOpenChat}
-            id={userId} 
-            onChat={setChat} 
-            onOpenChat={setIsOpenChat}
-            containerRef={containerRef} 
-            {...chat}
-          />
+            {/* Screen MessagesVar */}
+            <MessageVar 
+              onRefresh={() => setIsRefresh(!isRefresh)} 
+              isRefresh={isRefresh} 
+              isOpenChat={isOpenChat}
+              isLoadingMessages={isLoadingMessages}
+              id={userId} 
+              onChat={setChat} 
+              onOpenChat={setIsOpenChat}
+              onLoadingMessages={() => setIsLoadingMessages}
+              containerRef={containerRef} 
+              {...chat}
+            />
 
-        </div>
-      ) : (
-        // Loading
-        <div className='flex flex-col justify-center items-center w-full h-full'>
-          <Spinner 
-            color="warning" 
-            size='lg'
-          />
-          <span className='text-lg md:text-xl text-white flex justify-center items-center'>
-              Loading...
-          </span>
-        </div>
+          </div>
+        ) : (
+          // Loading
+          <LoadingVar />
       )}
       <Toaster position='top-center'/>
     </div>

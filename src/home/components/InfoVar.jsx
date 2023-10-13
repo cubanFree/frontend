@@ -7,10 +7,11 @@ import { useNavigate } from 'react-router-dom';
 
 const URL_TARGET = 'http://localhost:5000'
 
-function InfoVar({id, username, isRefresh, isOpenChat, onState = f => f}) {
+function InfoVar({id, username, isRefresh, isOpenChat, onState = f => f, onLogout = f => f}) {
 
     const [avatar, setAvatar] = React.useState(avatarDefault)
     const [isRequests, setIsRequests] = React.useState([])
+    
 
     const navegate = useNavigate()
 
@@ -19,6 +20,7 @@ function InfoVar({id, username, isRefresh, isOpenChat, onState = f => f}) {
         event.preventDefault()
         localStorage.removeItem('userId')
         localStorage.removeItem('idContact')
+        onLogout(true)
         navegate('/')
     }
 
@@ -136,7 +138,8 @@ function InfoVar({id, username, isRefresh, isOpenChat, onState = f => f}) {
                             onClick={(e) => logOut(e)}>                        
                                 <Button 
                                     as={Link}
-                                    className='font-semibold bg-dark'>
+                                    className='font-semibold bg-dark'
+                                    onClick={(e) => logOut(e)}>
                                         Log Out
                                 </Button>                        
                         </DropdownItem>

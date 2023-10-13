@@ -118,7 +118,7 @@ function FriendRequest({id, isRefresh, onRefresh = f => f}) {
     }, [isRefresh])
 
   return (
-    <div className='bg-gray-800 text-gray-300 col-3 h-[100vh] p-4 flex flex-col gap-4 rounded-tl-2xl border-r-1 border-gray-600'>
+    <div className='bg-gray-800 text-gray-300 col-4 h-[100vh] p-4 flex flex-col gap-4 rounded-tl-2xl border-r-1 border-gray-600'>
         {/* Header */}
         <div className='sticky top-0 flex justify-between'>
             <span className='font-bold text-xl'>

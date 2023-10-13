@@ -127,7 +127,7 @@ function ContactVar(
         return (
             <div 
                 key={idContact} 
-                className='w-full flex justify-between items-center font-semibold hover:bg-gray-600 cursor-pointer p-2'
+                className='w-full flex justify-between items-center font-semibold hover:bg-gray-600 cursor-pointer py-2'
                 onClick={(e) => {
                     e.preventDefault();
                     localStorage.setItem('idContact', idContact)
@@ -201,9 +201,9 @@ function ContactVar(
     }, [isRefresh, searchContact === ''])
 
   return (
-    <div className={'bg-gray-800 text-gray-300 col-3 col-s-12 p-4 flex flex-col gap-4 rounded-tl-2xl border-r-1 border-gray-600 md:block' + (isOpenChat ? ' hidden' : '')}>
+    <div className={'bg-gray-800 text-gray-300 col-4 col-s-12 p-4 flex flex-col gap-4 rounded-tl-2xl border-r-1 border-gray-600 md:block' + (isOpenChat ? ' hidden' : '')}>
         {/* Header */}
-        <div className='sticky top-0 flex flex-col gap-4'>
+        <div className='sticky top-0 flex flex-col gap-4 h-[15%]'>
             <span className='font-bold text-xl'>
                 Chats
             </span>
@@ -235,7 +235,7 @@ function ContactVar(
         </div>
         <ScrollShadow 
             hideScrollBar 
-            className="h-[100vh]">
+            className="h-[85%]">
                 {/* if filteredContacts is empty, show Not contacts */}
                 {filteredContacts.length === 0
                     ? (!userOnChats 
