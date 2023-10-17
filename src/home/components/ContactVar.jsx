@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
-import { Input, User, ScrollShadow, Tooltip, Link, Button } from '@nextui-org/react'
+import { Input, User, ScrollShadow, Tooltip, Link, Button, Divider } from '@nextui-org/react'
 import { HiOutlineRefresh } from 'react-icons/hi'
 import { Toaster, toast } from 'react-hot-toast'
 import { OpenChat } from '../ChatScreen'
+import LoadingVar from '../LoadingVar'
 
 const URL_TARGET = 'http://localhost:5000'
 
@@ -24,6 +25,7 @@ function ContactVar(
     const [filteredContacts, setFilteredContacts] = React.useState(contacts || null)
     const [userOnChats, setUserOnChats] = React.useState(null)
     const [isRequestSend, setIsRequestSend] = React.useState(false)
+    const [isLoading, setIsLoading] = React.useState(false)
 
     // Search the usernameSearch on Data Base
     const searchOnChats = async (event, username) => {
@@ -77,18 +79,18 @@ function ContactVar(
                 idContact: idContact
             })
         })
-        .then(response => response.json())
-        .then(data => {
-            if(data) {
-                toast.success(data.message)
-                setIsRequestSend(true)
-            } else {
-                toast.error(data.message)
-            }
-        })
-        .catch(error => {
-            console.error('Error en el envio de solucitud :(', error);
-        })
+            .then(response => response.json())
+            .then(data => {
+                if(data) {
+                    setIsRequestSend(true)
+                    toast.success(data.message)
+                } else {
+                    toast.error(data.message)
+                }
+            })
+            .catch(error => {
+                console.error('Error en el envio de solucitud :(', error);
+            })
     }
 
     // Cancel invitation
@@ -104,18 +106,18 @@ function ContactVar(
                 idContact: idContact
             })
         })
-        .then(response => response.json())
-        .then(data => {
-            if(data) {
-                toast.success(data.message)
-                setIsRequestSend(false)
-            } else {
-                toast.error(data.message)
-            }
-        })
-        .catch(error => {
-            console.error('Error al cancelar la solicitud :(', error);
-        })
+            .then(response => response.json())
+            .then(data => {
+                if(data) {
+                    setIsRequestSend(false)
+                    toast.success(data.message)
+                } else {
+                    toast.error(data.message)
+                }
+            })
+            .catch(error => {
+                console.error('Error al cancelar la solicitud :(', error);
+            })
     }
 
     // Loop contacts
@@ -124,46 +126,51 @@ function ContactVar(
         // Check if user is on contacts
         const isOnContact = contacts.some(contact => contact.username === username)
 
+        const onClickContact = async (event) => {
+            event.preventDefault();
+
+            localStorage.setItem('idContact', idContact)
+            onOpenChat(true)
+            await new Promise(resolve => setTimeout(resolve, 0));
+            OpenChat({id, containerRef, onChat})
+            
+        }
+
         return (
-            <div 
-                key={idContact} 
-                className='w-full flex justify-between items-center font-semibold hover:bg-gray-600 cursor-pointer py-2'
-                onClick={(e) => {
-                    e.preventDefault();
-                    localStorage.setItem('idContact', idContact)
-                    OpenChat({id, containerRef, onChat, onRefresh})
-                    setTimeout(() => {
-                        onOpenChat(true)
-                    }, 200)
-                }}>
-                    <User   
-                        name={username}
-                        avatarProps={{
-                            src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
-                            size: "lg",
-                        }}
-                        isFocusable={false}
-                        
-                    />
-                    {!isOnContact &&
-                            (!isRequestSend
-                                ?
-                                    <Button 
-                                        className='bg-yellow-600 font-semibold' 
-                                        size='sm'
-                                        onClick={(e) => sendInvitation(e, idContact)}>
-                                            Invite
-                                    </Button>
-                                : 
-                                    <Button 
-                                        className='bg-yellow-600 font-semibold' 
-                                        size='sm'
-                                        onClick={(e) => cancelInvitation(e, idContact)}>
-                                            Cancel request
-                                    </Button>
-                            )
-                    }
-            </div>
+            <React.Fragment key={idContact}>
+                <div 
+                    className='w-full flex justify-between items-center font-semibold hover:bg-gray-600 cursor-pointer py-2'
+                    onClick={(e) => onClickContact(e)}>
+                        <User   
+                            name={username}
+                            avatarProps={{
+                                src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+                                size: "lg",
+                            }}
+                            isFocusable={false}
+                            
+                        />
+                        {!isOnContact &&
+                                (!isRequestSend
+                                    ?
+                                        <Button 
+                                            className='bg-yellow-600 font-semibold' 
+                                            size='sm'
+                                            onClick={(e) => sendInvitation(e, idContact)}>
+                                                Invite
+                                        </Button>
+                                    : 
+                                        <Button 
+                                            className='bg-yellow-600 font-semibold' 
+                                            size='sm'
+                                            onClick={(e) => cancelInvitation(e, idContact)}>
+                                                Cancel request
+                                        </Button>
+                                )
+                        }
+                </div>
+                <Divider className='bg-gray-700'/>
+            </React.Fragment>
         )
     }
 
@@ -176,14 +183,30 @@ function ContactVar(
 
     // Get contacts
     useEffect(() => {
-        fetch(`${URL_TARGET}/contacts/${id}`, { method: 'GET' })
-        .then(response => response.json())
-        .then(data => {
-            setContacts(data.contacts)
-        })
-        .catch(error => {
-            console.error('Error al obtener los contactos del usuario:', error);
-        })
+        const getContacts = async () => {
+            // Loading
+            setIsLoading(true)
+            await new Promise(resolve => setTimeout(resolve, 0))
+
+            try {
+                const response = await fetch(`${URL_TARGET}/contacts/${id}`, { method: 'GET' })
+                if (!response.ok) {
+                    throw new Error('Error al obtener los contactos del usuario.');
+                }
+
+                const data = await response.json()
+                if(data) {
+                    setContacts(data.contacts)
+                }
+                
+            } catch (error) {
+                console.error('Error en el fetch GetContacts:', error);
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
+        getContacts()
     }, [id, isRefresh])
 
     // Filter contacts
@@ -238,7 +261,9 @@ function ContactVar(
             className="h-[85%]">
                 {/* if filteredContacts is empty, show Not contacts */}
                 {filteredContacts.length === 0
-                    ? (!userOnChats 
+                    ? isLoading 
+                        ? <LoadingVar />
+                        : (!userOnChats 
                             ?
                                 <div className='flex flex-col items-center gap-3'>
                                     <span className='text-gray-400 text-lg text-center'>

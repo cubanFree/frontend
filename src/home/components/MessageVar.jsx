@@ -6,7 +6,6 @@ import bg_chat from '../../assets/bgChat.jpeg';
 import toast from 'react-hot-toast';
 import LoopMessage from './LoopMessage';
 import { OpenChat, ScrollDown } from '../ChatScreen';
-import LoadingVar from '../LoadingVar';
 
 const URL_TARGET = 'http://localhost:5000'
 
@@ -17,12 +16,9 @@ function MessageVar(
             chats, 
             isRefresh, 
             isOpenChat,
-            isLoadingMessages,
-            containerRef, 
-            onRefresh = f => f, 
+            containerRef,
             onChat = f => f,
-            onOpenChat = f => f,
-            onLoadingMessages = f => f
+            onOpenChat = f => f
         }
     ) {
 
@@ -59,16 +55,15 @@ function MessageVar(
           const data = await response.json();
       
           if (data) {
-            OpenChat({id, containerRef, onChat, onRefresh});
+            OpenChat({id, containerRef, onChat});
             toast.success(data.message);
           } else {
             toast.error(data.message);
           }
         } catch (error) {
           console.error('Error en el fetch :(', error);
-          toast.error('Error during message sending.');
         }
-      };      
+    };      
 
     // event listener on enter
     const capEvent = (event, funct) => {
@@ -77,16 +72,13 @@ function MessageVar(
         }
     }
 
-    // detectar cuando no estas en el final de los mensajes
+    // detectar cuando no estas en el final de los mensajes y loading
     useEffect(() => {
         const container = containerRef.current;
 
         if (container) {
             const handleScroll = () => {
-          
-                const isNotAtBottom = container.scrollTop + container.clientHeight >= container.scrollHeight;
-
-          
+                const isNotAtBottom = container.scrollTop + container.clientHeight + 20 >= container.scrollHeight;
                 setIsScrolledToBottom(!isNotAtBottom);
               };
           
@@ -104,10 +96,6 @@ function MessageVar(
     useEffect(() => {
         setWriteMessage('');
     }, [isRefresh]);
-
-    useEffect(() => {
-        {onLoadingMessages(false)}
-    }, [chats.length > 0])
 
   return (
     <div className={'text-gray-300 md:col-12 md:block h-screen ' + (isOpenChat ? 'block' : 'hidden')}>
@@ -143,49 +131,33 @@ function MessageVar(
                 alt="bg_chat" 
                 className='z-0 object-cover min-h-[100vh] w-full blur-sm' 
             />
-            <div className='2xl:px-[10rem] mt-[1%] md:mb-0 px-[1.5rem] overflow-y-auto snap-y absolute top-0 w-full h-[85%]'>
+            <div className='2xl:px-[10rem] mt-[1%] md:mb-0 px-[1.5rem] overflow-y-auto absolute top-0 w-full h-[85%]'>
                 {chats.length > 0 
-                    &&  ( 
-                        <>
-                            <ScrollShadow 
-                                isEnabled={false}
-                                ref={containerRef}
-                                hideScrollBar 
-                                className="md:h-[80vh] w-full z-10">
-                                    {chats.map((message, index) => {
+                    ?  (
+                        <ScrollShadow 
+                            isEnabled={false}
+                            ref={containerRef}
+                            hideScrollBar 
+                            className="md:h-[80vh] w-full z-10">
+                                {chats.map((message, index) => {
 
-                                            // get Date
-                                            const currentDate = new Date(message.body.date);
-                                            const getDate = currentDate.toLocaleDateString()
-                                            const getHour = currentDate.toLocaleTimeString('es-ES', { hour: 'numeric', minute: 'numeric', hour12: true })
+                                        // get Date
+                                        const currentDate = new Date(message.body.date);
+                                        const getDate = currentDate.toLocaleDateString()
+                                        const getHour = currentDate.toLocaleTimeString('es-ES', { hour: 'numeric', minute: 'numeric', hour12: true })
 
-                                            if(prevDateRef.current !== getDate || index === 0) {
-                                                prevDateRef.current = getDate; 
-                                                return (
-                                                    <React.Fragment key={index}>
-                                                        {/* Show date */}
-                                                        <div className='flex justify-center items-center'>
-                                                            <div className='border-b-1 border-gray-600 w-[50%]'></div>
-                                                            <div className="flex justify-center items-center">
-                                                                <span className="text-[0.9rem] text-gray-400 px-2">{getDate}</span>
-                                                            </div>
-                                                            <div className='border-b-1 border-gray-600 w-[50%]'></div>
-                                                        </div>
-                                                        {/* Show date, one time */}
-                                                        <div>
-                                                            <LoopMessage 
-                                                                key={index} 
-                                                                index={index} 
-                                                                getHour={getHour} 
-                                                                message={message} 
-                                                            />
-                                                        </div>
-                                                    </React.Fragment>
-                                                )
-                                            } 
-
+                                        if(prevDateRef.current !== getDate || index === 0) {
+                                            prevDateRef.current = getDate; 
                                             return (
                                                 <React.Fragment key={index}>
+                                                    {/* Show date */}
+                                                    <div className='flex justify-center items-center'>
+                                                        <div className='border-b-1 border-gray-600 w-[50%]'></div>
+                                                        <div className="flex justify-center items-center">
+                                                            <span className="text-[0.9rem] text-gray-400 px-2">{getDate}</span>
+                                                        </div>
+                                                        <div className='border-b-1 border-gray-600 w-[50%]'></div>
+                                                    </div>
                                                     {/* Show date, one time */}
                                                     <div>
                                                         <LoopMessage 
@@ -196,32 +168,40 @@ function MessageVar(
                                                         />
                                                     </div>
                                                 </React.Fragment>
-                                            );
-                                        })
-                                    }
-                            </ScrollShadow>
-                        </>
-                    )
-                }
-                {!chats.length > 0 && (
-                    isLoadingMessages ? (
-                        <LoadingVar />
+                                            )
+                                        } 
+
+                                        return (
+                                            <React.Fragment key={index}>
+                                                {/* Show date, one time */}
+                                                <div>
+                                                    <LoopMessage 
+                                                        key={index} 
+                                                        index={index} 
+                                                        getHour={getHour} 
+                                                        message={message} 
+                                                    />
+                                                </div>
+                                            </React.Fragment>
+                                        );
+                                    })
+                                }
+                        </ScrollShadow>
                     ) : (
                         <div className="flex justify-center items-center h-[80vh] z-10">
                             <span className="text-gray-400 text-lg">No messages yet</span>
                         </div>
                     )
-                )
                 }
                 {
                     isScrolledToBottom && (
                         <div 
                             className='absolute bottom-[1.5rem] right-[1.5rem] bg-gray-700 p-1 rounded-full'
                             onClick={() => ScrollDown({containerRef})}>
-                            <BsArrowDownShort 
-                                size={30} 
-                                className="text-gray-400"
-                            />
+                                <BsArrowDownShort 
+                                    size={30} 
+                                    className="text-gray-400"
+                                />
                         </div>
                     )
                 }

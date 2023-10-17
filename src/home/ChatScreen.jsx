@@ -11,58 +11,48 @@ const URL_TARGET = 'http://localhost:5000'
 
 // open chat function
 export async function OpenChat(
-    { 
-      id, 
-      containerRef, 
-      onChat = f => f, 
-      onRefresh = f => f
+  { 
+    id, 
+    containerRef, 
+    onChat = f => f
+  }) {
+    
+    const idContact = localStorage.getItem('idContact');
+    if (!idContact) {
+      toast.error('Missing idContact in localStorage.');
+      return;
     }
-  ) {
 
-  try {
-      const idContact = localStorage.getItem('idContact');
-
-      if (!idContact) {
-        toast.error('Missing idContact in localStorage.');
-        return;
-      }
-
+    try {
       const response = await fetch(`${URL_TARGET}/open-chat/${id}`, {
-          method: 'PATCH',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-              idContact: idContact,
-          }),
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            idContact: idContact,
+        })
       });
 
       const data = await response.json();
 
       if (data) {
           onChat( data );
-
-          // update state
-          onRefresh(); 
-
-          // wait for update state and Scroll down
-          setTimeout(() => {
-            ScrollDown({ containerRef });
-          }, 0)
+          await new Promise(resolve => setTimeout(resolve, 0)); // wait for update state and Scroll down
+          ScrollDown({containerRef});
       } else {
-          toast.error( 'Unexpected response from the server.' );
+          toast.error( 'Error to get chat' );
       }
-      
-  } catch (error) {
-      console.error('Error opening chat :(', error);
-      toast.error('Error opening chat. Please try again.');
-  }
+        
+    } catch (error) {
+        console.error('Error en el fetch OpenChat :(', error);
+    }
 }
 
 // scroll down function
-export function ScrollDown ({containerRef}) {
+export async function ScrollDown ({containerRef}) {
   if (containerRef.current) {
-    containerRef.current.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'smooth' })
+    await containerRef.current.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'smooth' })
   }
 }
 
@@ -71,7 +61,7 @@ function ChatScreen() {
   const [userData, setUserData] = useState( null );
   const [stateChange, setStateChange] = useState( 'contacts' );
   const [isRefresh, setIsRefresh] = useState( false );
-  const [chat, setChat] = useState({ username: '', chats: [] }); // guarda todo el content (body, date, _id), elfrom y username
+  const [chat, setChat] = useState({ username: '', chats: [] });
   const [isOpenChat, setIsOpenChat] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
@@ -101,6 +91,11 @@ function ChatScreen() {
         navigate('/');
       });
   }, [userId]);
+
+  // refresh Chat
+  useEffect(() => {
+    setIsRefresh(!isRefresh);
+  }, [chat])
 
   return (
     <div className='bg-gray-800 text-gray-300 w-full md:h-[100vh] overflow-hidden h-screen p-0 m-0'>

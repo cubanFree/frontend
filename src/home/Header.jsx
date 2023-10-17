@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     Card, 
     CardHeader, 
@@ -37,13 +37,15 @@ function Header() {
     const [window, setWindow] = React.useState(true)
     const [username, setUsername] = React.useState('')
     const [password, setPassword] = React.useState('')
-    const [isLogin, setIsLogin] = React.useState(false)
-    const [isSignUp, setIsSignUp] = React.useState(false)
-
+    const [isLoading, setIsLoading] = React.useState(false)
     const navegate = useNavigate()
 
-    const signUp = (event) => {
+    const signUp = async (event) => {
         event.preventDefault()
+
+        // Loading
+        setIsLoading(true)
+        await new Promise(resolve => setTimeout(resolve, 0));
 
         fetch(`${URL_TARGET}/register`, {
             method: 'POST',
@@ -55,23 +57,32 @@ function Header() {
                 password: password,
             }),
         })
-        .then(response => response.json())
-        .then(data => {
-            if(data.flag) {
-                toast.success('Created!')
-            } else {
-                toast.error(data.message);
-            }
-        });
+            .then(response => response.json())
+            .then(data => {
+                if(data.flag) {
+                    toast.success('Created!')
+                } else {
+                    toast.error(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error en el registro :(', error);
+            })
+            .finally(() => {
+                setPassword('')
+                setUsername('')
+                setIsLoading(false)
+            });
         
-        setPassword('')
-        setUsername('')
-        setIsSignUp(true)
     }
 
-    const signIn = (event) => {
+    const signIn = async (event) => {
         event.preventDefault()
       
+        // Loading
+        setIsLoading(true)
+        await new Promise(resolve => setTimeout(resolve, 0));
+
         fetch(`${URL_TARGET}/login`, {
             method: 'POST',
             headers: {
@@ -82,20 +93,24 @@ function Header() {
                 password: password
             })
         })
-        .then(response => response.json())
-        .then(data => {
-            if(data.flag) {
-                toast.success('Done!');
-                localStorage.setItem('userId', data.id);
-                navegate('/chat')
-            } else {
-                toast.error(data.message);
-            }
-        })
-
-        setPassword('')
-        setUsername('')
-        setIsLogin(true)
+            .then(response => response.json())
+            .then(data => {
+                if(data.flag) {
+                    toast.success('Done!');
+                    localStorage.setItem('userId', data.id);
+                    navegate('/chat')
+                } else {
+                    toast.error(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error en el registro :(', error);
+            })
+            .finally(() => {
+                setPassword('')
+                setUsername('')
+                setIsLoading(false)
+            });
     }
 
     // Función asincrónica para simular el evento de presionar una tecla
@@ -105,10 +120,15 @@ function Header() {
         }
     }
 
+    // clear storage
+    useEffect(() => {
+        localStorage.clear()
+    }), [];
+
     return (
         <div className='min-h-[100vh] flex justify-center items-center bg-gray-900'>
            {
-               !isLogin || !isSignUp
+               !isLoading
                ? (
                     <>
                         <div className='absolute md:top-[22.5%] md:flex z-20 mb-[-32px] hidden'>
