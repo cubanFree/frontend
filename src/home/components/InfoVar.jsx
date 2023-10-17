@@ -4,13 +4,12 @@ import avatarDefault from '../../assets/avatar.jpg';
 import { BsKey, BsLaptop, BsChatLeftTextFill } from 'react-icons/bs';
 import { FaUserFriends } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import LoadibgVar from '../LoadingVar';
+import LoadingVar from '../LoadingVar';
 
 const URL_TARGET = 'http://localhost:5000'
 
 function InfoVar({id, username, isRefresh, isOpenChat, onState = f => f, onLogout = f => f}) {
 
-    const [avatar, setAvatar] = React.useState(avatarDefault)
     const [isRequests, setIsRequests] = React.useState([])
     const [isLoading, setIsLoading] = React.useState(false)
     
@@ -43,14 +42,14 @@ function InfoVar({id, username, isRefresh, isOpenChat, onState = f => f, onLogou
   return (                                       
         isLoading
             ? (
-                <LoadibgVar />
+                <LoadingVar />
             ) : (
                 <div className={'p-3 col-1 col-s-12 flex md:flex-col md:flex justify-between items-center md:h-[100vh]' + (isOpenChat ? ' hidden' : '')}>
                     <div className='flex md:flex-col justify-center items-center md:gap-1 gap-5'>
 
                         {/* Contacts */}
                         <Link 
-                            className='cursor-pointer hover:bg-gray-800 rounded-lg p-2'
+                            className='cursor-pointer hover:bg-gray-800 rounded-lg p-3'
                             onClick={() => onState('contacts')}>
                                 <BsChatLeftTextFill 
                                     size={25} 
@@ -60,14 +59,14 @@ function InfoVar({id, username, isRefresh, isOpenChat, onState = f => f, onLogou
 
                         {/* Friends requests */}
                         <Link 
-                            className='cursor-pointer hover:bg-gray-800 rounded-lg p-2 relative'
+                            className='cursor-pointer hover:bg-gray-800 rounded-lg p-3 relative'
                             onClick={() => onState('friends-requests')}>
                                 {isRequests.length > 0 
                                     ?
                                         <Badge 
-                                            content={isRequests.length} 
-                                            color="primary" 
-                                            variant='shadow' 
+                                            content={isRequests.length}
+                                            variant='shadow'
+                                            className='border-0 bg-yellow-500 font-semibold rounded-md'
                                             size='sm'>
                                                 <FaUserFriends 
                                                     size={30} 
@@ -89,7 +88,7 @@ function InfoVar({id, username, isRefresh, isOpenChat, onState = f => f, onLogou
                             <Avatar
                                 as="button"
                                 isBordered={true}
-                                src={avatar}
+                                src={avatarDefault}
                                 radius='lg'
                             />
                         </DropdownTrigger>
@@ -104,8 +103,8 @@ function InfoVar({id, username, isRefresh, isOpenChat, onState = f => f, onLogou
                                     className="h-10 gap-2" 
                                     variant='menu' 
                                     textValue='hello_user'>
-                                        <div className='flex items-center cursor-default'>
-                                            <p className="font-semibold flex justify-start items-center">
+                                        <div className='flex items-center cursor-default justify-end'>
+                                            <p className="font-semibold flex items-center">
                                                 Hello <span className='font-bold ml-2 bg-warning-300 p-1 rounded-md'>{ username }</span>
                                             </p>
                                         </div>

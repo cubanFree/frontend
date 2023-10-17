@@ -4,6 +4,7 @@ import { HiOutlineRefresh } from 'react-icons/hi'
 import { Toaster, toast } from 'react-hot-toast'
 import { OpenChat } from '../ChatScreen'
 import LoadingVar from '../LoadingVar'
+import avatarDefault from '../../assets/avatar.jpg'
 
 const URL_TARGET = 'http://localhost:5000'
 
@@ -139,16 +140,15 @@ function ContactVar(
         return (
             <React.Fragment key={idContact}>
                 <div 
-                    className='w-full flex justify-between items-center font-semibold hover:bg-gray-600 cursor-pointer py-2'
+                    className='w-full flex justify-between items-center font-semibold hover:bg-gray-600 rounded-md cursor-pointer py-2'
                     onClick={(e) => onClickContact(e)}>
                         <User   
                             name={username}
                             avatarProps={{
-                                src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
-                                size: "lg",
+                                src: avatarDefault,
+                                size: "lg"
                             }}
                             isFocusable={false}
-                            
                         />
                         {!isOnContact &&
                                 (!isRequestSend

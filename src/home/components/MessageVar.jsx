@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { User, ScrollShadow, Input, Button, Image } from '@nextui-org/react';
+import { User, ScrollShadow, Input, Button } from '@nextui-org/react';
 import { AiOutlineSend } from 'react-icons/ai';
 import { BsArrowLeftShort, BsArrowDownShort } from 'react-icons/bs';
 import bg_chat from '../../assets/bgChat.jpeg';
 import toast from 'react-hot-toast';
 import LoopMessage from './LoopMessage';
 import { OpenChat, ScrollDown } from '../ChatScreen';
+import avatarDefault from '../../assets/avatar.jpg';
 
 const URL_TARGET = 'http://localhost:5000'
 
@@ -102,7 +103,7 @@ function MessageVar(
 
         {/* Header */}
         <div 
-            className={'bg-gray-800 h-[7%] md:h-[7.5%] p-1 border-b-1 border-gray-600 sticky top-0 z-20 flex justify-center items-center gap-4' + (username === '' ? ' hidden' : '')}>
+            className={'bg-gray-800 min-h-[7vh] p-2 border-b-1 border-gray-600 sticky top-0 z-20 flex justify-center items-center gap-4' + (username === '' ? ' hidden' : '')}>
                 <div 
                     className='bg-gray-600 p-1 rounded-full md:hidden'
                     onClick={(e) => {
@@ -116,8 +117,9 @@ function MessageVar(
                     name={username}
                     description="Product Designer"
                     avatarProps={{
-                        src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+                        src: avatarDefault,
                         size: "md",
+                        isBordered: true
                     }}
                     className='w-full flex justify-start font-semibold hover:bg-gray-800 cursor-pointer p-2'
                     isFocusable={false}
@@ -125,20 +127,20 @@ function MessageVar(
         </div>
 
         {/* Body */}
-        <div className='w-full relative'>
-            <Image 
+        <div className='w-full relative min-h-[85vh]'>
+            <img 
                 src={bg_chat} 
-                alt="bg_chat" 
-                className='z-0 object-cover min-h-[100vh] w-full blur-sm' 
+                alt="bg_chat"
+                className='object-cover w-full h-screen absolute top-0 z-0'
             />
-            <div className='2xl:px-[10rem] mt-[1%] md:mb-0 px-[1.5rem] overflow-y-auto absolute top-0 w-full h-[85%]'>
+            <div className='2xl:px-[10rem] px-[1.5rem] w-full relative z-10'>
                 {chats.length > 0 
                     ?  (
                         <ScrollShadow 
                             isEnabled={false}
                             ref={containerRef}
                             hideScrollBar 
-                            className="md:h-[80vh] w-full z-10">
+                            className="h-[85vh] w-full">
                                 {chats.map((message, index) => {
 
                                         // get Date
@@ -188,18 +190,18 @@ function MessageVar(
                                 }
                         </ScrollShadow>
                     ) : (
-                        <div className="flex justify-center items-center h-[80vh] z-10">
+                        <div className="flex justify-center items-center min-h-screen">
                             <span className="text-gray-400 text-lg">No messages yet</span>
                         </div>
                     )
                 }
                 {
-                    isScrolledToBottom && (
+                    isScrolledToBottom && username && (
                         <div 
-                            className='absolute bottom-[1.5rem] right-[1.5rem] bg-gray-700 p-1 rounded-full'
+                            className='absolute bottom-[1.5rem] right-[1.5rem] bg-gray-700 p-1 rounded-full cursor-pointer border-2 border-gray-500'
                             onClick={() => ScrollDown({containerRef})}>
                                 <BsArrowDownShort 
-                                    size={30} 
+                                    size={25} 
                                     className="text-gray-400"
                                 />
                         </div>
@@ -209,7 +211,7 @@ function MessageVar(
         </div>
 
         {/* Footer */}
-        <div className='bg-gray-800 p-3 h-[8.5%] md:h-[7.5%] pe-0 border-t-1 border-gray-600 sticky bottom-0 flex z-20'>
+        <div className={'bg-gray-800 p-3 min-h-[8.5vh] pe-0 border-t-1 border-gray-600 flex z-10 relative ' + (username === '' ? ' hidden' : '')}>
             <Input 
                 isDisabled={!username} 
                 value={writeMessage} 

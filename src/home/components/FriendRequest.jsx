@@ -4,6 +4,7 @@ import { HiOutlineRefresh } from "react-icons/hi";
 import { AiOutlineClose } from "react-icons/ai";
 import { Toaster, toast } from 'react-hot-toast';
 import { v4 as uuid } from 'uuid';
+import avatarDefault from "../../assets/avatar.jpg";
 
 const URL_TARGET = 'http://localhost:5000'
 
@@ -71,11 +72,11 @@ function FriendRequest({id, isRefresh, onRefresh = f => f}) {
     const loopRequests = (idContact, username) => {
 
         return (
-            <div key={idContact} className='w-full flex justify-between items-center font-semibold hover:bg-gray-600 p-2'>
+            <div key={idContact} className='w-full flex justify-between gap-4 items-center font-semibold hover:bg-gray-600 p-2'>
                 <User   
                     name={username}
                     avatarProps={{
-                        src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+                        src: avatarDefault,
                         size: "lg",
                     }}
                     isFocusable={false}
@@ -89,12 +90,12 @@ function FriendRequest({id, isRefresh, onRefresh = f => f}) {
                         >
                         Confirm
                     </Button>
-                    <Link 
+                    <div 
                         className='ml-4 cursor-pointer'
                         onClick={(e) => deleteRequest(e, idContact)}
                         >
                         <AiOutlineClose color='gray'/>
-                    </Link>
+                    </div>
                 </div>
             </div>
         )
