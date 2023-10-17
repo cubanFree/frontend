@@ -140,7 +140,7 @@ function ContactVar(
         return (
             <React.Fragment key={idContact}>
                 <div 
-                    className='w-full flex justify-between items-center font-semibold hover:bg-gray-600 rounded-md cursor-pointer py-2'
+                    className='w-full flex justify-start items-center font-semibold hover:bg-gray-600 rounded-md cursor-pointer py-2'
                     onClick={(e) => onClickContact(e)}>
                         <User   
                             name={username}
@@ -224,9 +224,9 @@ function ContactVar(
     }, [isRefresh, searchContact === ''])
 
   return (
-    <div className={'bg-gray-800 text-gray-300 col-4 col-s-12 p-4 flex flex-col gap-4 rounded-tl-2xl border-r-1 border-gray-600 md:block' + (isOpenChat ? ' hidden' : '')}>
+    <div className={'bg-gray-800 text-gray-300 col-4 col-s-12 p-4 rounded-tl-2xl border-r-1 border-gray-600 md:block' + (isOpenChat ? ' hidden' : '')}>
         {/* Header */}
-        <div className='sticky top-0 flex flex-col gap-4 h-[15%]'>
+        <div className='flex flex-col gap-2'>
             <span className='font-bold text-xl'>
                 Chats
             </span>
@@ -246,45 +246,47 @@ function ContactVar(
                         </Link>
                 </Tooltip>
             </div>
-            <Input
-                variant="bordered"
-                placeholder="Search for a contact"
-                className="w-full flex"
-                radius='sm'
-                color='warning'
-                onChange={(e) => setSearchContact(e.target.value)}
-                onKeyUp={(e) => capEvent(e, () => searchOnChats(e, searchContact))}
-            />
+            <div className="w-full flex">
+                <Input
+                    variant="bordered"
+                    placeholder="Search for a contact"
+                    radius='sm'
+                    color='warning'
+                    onChange={(e) => setSearchContact(e.target.value)}
+                    onKeyUp={(e) => capEvent(e, () => searchOnChats(e, searchContact))}
+                />
+            </div>
         </div>
-        <ScrollShadow 
-            hideScrollBar 
-            className="h-[85%]">
-                {/* if filteredContacts is empty, show Not contacts */}
-                {filteredContacts.length === 0
-                    ? isLoading 
-                        ? <LoadingVar />
-                        : (!userOnChats 
-                            ?
-                                <div className='flex flex-col items-center gap-3'>
-                                    <span className='text-gray-400 text-lg text-center'>
-                                        Not contacts
-                                    </span>
-                                    {searchContact && 
-                                            <Button 
-                                                className='w-[40%] text-md font-semibold font-sans' 
-                                                size='sm' 
-                                                color='primary' 
-                                                fullWidth={false}
-                                                onClick={(e) => {searchOnChats(e, searchContact)}}>
-                                                    Search on Chats
-                                            </Button>
-                                    }
-                                </div>
-                            : loopContacts(userOnChats.id, userOnChats.username)
-                        )
-                    : filteredContacts.map((data) => loopContacts(data.id, data.username))
-                }
-        </ScrollShadow>
+        <div className='flex flex-col mt-1'>
+            <ScrollShadow 
+                hideScrollBar>
+                    {/* if filteredContacts is empty, show Not contacts */}
+                    {filteredContacts.length === 0
+                        ? isLoading 
+                            ? <LoadingVar />
+                            : (!userOnChats 
+                                ?
+                                    <div className='flex flex-col items-center gap-3'>
+                                        <span className='text-gray-400 text-lg text-center'>
+                                            Not contacts
+                                        </span>
+                                        {searchContact && 
+                                                <Button 
+                                                    className='w-[40%] text-md font-semibold font-sans' 
+                                                    size='sm' 
+                                                    color='primary' 
+                                                    fullWidth={false}
+                                                    onClick={(e) => {searchOnChats(e, searchContact)}}>
+                                                        Search on Chats
+                                                </Button>
+                                        }
+                                    </div>
+                                : loopContacts(userOnChats.id, userOnChats.username)
+                            )
+                        : filteredContacts.map((data) => loopContacts(data.id, data.username))
+                    }
+            </ScrollShadow>
+        </div>
         <Toaster/>
     </div>
   )

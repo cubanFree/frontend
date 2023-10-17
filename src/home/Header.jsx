@@ -43,37 +43,30 @@ function Header() {
     const signUp = async (event) => {
         event.preventDefault()
 
-        // Loading
-        setIsLoading(true)
-        await new Promise(resolve => setTimeout(resolve, 0));
+        try {
+            const response = await fetch(`${URL_TARGET}/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                }),
+            })
+            
+            const data = await response.json()
+            if(data.flag) {
+                toast.success('Created!')
+            } else {
+                toast.error(data.message)
+            }
 
-        fetch(`${URL_TARGET}/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password,
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                if(data.flag) {
-                    toast.success('Created!')
-                } else {
-                    toast.error(data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error en el registro :(', error);
-            })
-            .finally(() => {
-                setPassword('')
-                setUsername('')
-                setIsLoading(false)
-            });
-        
+            setPassword('')
+            setUsername('')
+        } catch (error) {
+            console.error('Error en el registro :(', error);
+        }
     }
 
     const signIn = async (event) => {
@@ -96,7 +89,6 @@ function Header() {
             .then(response => response.json())
             .then(data => {
                 if(data.flag) {
-                    toast.success('Done!');
                     localStorage.setItem('userId', data.id);
                     navegate('/chat')
                 } else {

@@ -140,7 +140,7 @@ function MessageVar(
                             isEnabled={false}
                             ref={containerRef}
                             hideScrollBar 
-                            className="h-[85vh] w-full">
+                            className="h-[100vh] w-full pb-[10rem]">
                                 {chats.map((message, index) => {
 
                                         // get Date
@@ -198,7 +198,7 @@ function MessageVar(
                 {
                     isScrolledToBottom && username && (
                         <div 
-                            className='absolute bottom-[1.5rem] right-[1.5rem] bg-gray-700 p-1 rounded-full cursor-pointer border-2 border-gray-500'
+                            className='absolute bottom-[10rem] right-[1.5rem] bg-gray-700 p-1 rounded-full cursor-pointer border-2 border-gray-500'
                             onClick={() => ScrollDown({containerRef})}>
                                 <BsArrowDownShort 
                                     size={25} 
@@ -211,7 +211,7 @@ function MessageVar(
         </div>
 
         {/* Footer */}
-        <div className={'bg-gray-800 p-3 min-h-[8.5vh] pe-0 border-t-1 border-gray-600 flex z-10 relative ' + (username === '' ? ' hidden' : '')}>
+        <div className={'bg-gray-800 p-3 pe-0 min-h-[5rem] border-t-1 border-gray-600 flex z-10 sticky bottom-0 ' + (username === '' ? ' hidden' : '')}>
             <Input 
                 isDisabled={!username} 
                 value={writeMessage} 
