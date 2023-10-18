@@ -93,7 +93,9 @@ function Header() {
                     localStorage.setItem('userId', data.id);
                     navegate('/chat')
                 } else {
-                    toast.error(data.message)
+                    setTimeout(() => {
+                        toast.error(data.message)
+                    }, 0)
                 }
             })
             .catch(error => {
