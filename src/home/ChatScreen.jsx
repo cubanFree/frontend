@@ -38,8 +38,9 @@ export async function OpenChat(
 
       if (data) {
           onChat( data );
-          await new Promise(resolve => setTimeout(resolve, 0)); // wait for update state and Scroll down
-          ScrollDown({containerRef});
+          setTimeout(() => {
+            ScrollDown({containerRef});
+          }, 0)
       } else {
           toast.error( 'Error to get chat' );
       }
@@ -48,15 +49,14 @@ export async function OpenChat(
         console.error('Error en el fetch OpenChat :(', error);
     }
 
-    return;
+    return null;
 }
 
 // scroll down function
-export async function ScrollDown ({containerRef}) {
+export function ScrollDown ({containerRef}) {
   if (containerRef.current) {
-    await containerRef.current.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'smooth' })
+    containerRef.current.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'smooth' })
   }
-
   return;
 }
 
@@ -79,8 +79,9 @@ function ChatScreen() {
     if (!userId) {
       localStorage.removeItem('idContact');
       navigate('/');
-      toast.error('You must be logged in to continue!');
-      return;
+      setTimeout(() => {
+        toast.error('You must be logged in to continue!');
+      }, 0)
     }
 
     // Realiza la solicitud HTTP para obtener los datos del usuario

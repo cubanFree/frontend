@@ -38,6 +38,7 @@ function Header() {
     const [username, setUsername] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [isLoading, setIsLoading] = React.useState(false)
+
     const navegate = useNavigate()
 
     const signUp = async (event) => {
@@ -62,13 +63,14 @@ function Header() {
                 toast.error(data.message)
             }
 
-            setPassword('')
-            setUsername('')
         } catch (error) {
             console.error('Error en el registro :(', error);
         }
 
-        return;
+        setPassword('')
+        setUsername('')
+
+        return null;
     }
 
     const signIn = async (event) => {
@@ -101,8 +103,7 @@ function Header() {
             .catch(error => {
                 console.error('Error en el registro :(', error);
             })
-
-        await new Promise(resolve => setTimeout(resolve, 0));
+            
         setPassword('')
         setUsername('')
         setIsLoading(false)

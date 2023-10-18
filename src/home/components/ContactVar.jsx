@@ -65,7 +65,7 @@ function ContactVar(
           toast.error(error.message);
         }
 
-        return;
+        return null;
     } 
 
     // Send invitation
@@ -86,7 +86,9 @@ function ContactVar(
             .then(data => {
                 if(data) {
                     setIsRequestSend(true)
-                    toast.success(data.message)
+                    setTimeout(() => {
+                        toast.success(data.message)
+                    }, 0)
                 } else {
                     toast.error(data.message)
                 }
@@ -95,7 +97,7 @@ function ContactVar(
                 console.error('Error en el envio de solucitud :(', error);
             })
 
-        return;
+        return null;
     }
 
     // Cancel invitation
@@ -124,7 +126,7 @@ function ContactVar(
                 console.error('Error al cancelar la solicitud :(', error);
             })
 
-        return;
+        return null;
     }
 
     // Loop contacts
@@ -138,10 +140,9 @@ function ContactVar(
 
             localStorage.setItem('idContact', idContact)
             onOpenChat(true)
-            await new Promise(resolve => setTimeout(resolve, 0));
             OpenChat({id, containerRef, onChat})
 
-            return;
+            return null;
         }
 
         return (
@@ -227,7 +228,9 @@ function ContactVar(
     // Refresh
     useEffect(() => {
         setUserOnChats(null)
-        toast.success('Refreshed contacts!')
+        setTimeout(() => {
+            toast.success('Refreshed contacts!')
+        }, 0)
     }, [isRefresh, searchContact === ''])
 
   return (

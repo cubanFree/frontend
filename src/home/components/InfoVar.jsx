@@ -17,15 +17,13 @@ function InfoVar({id, username, isRefresh, isOpenChat, onState = f => f, onLogou
     const navegate = useNavigate()
 
     // Log out function
-    const logOut = async (event) => {
+    const logOut = (event) => {
         event.preventDefault()
         setIsLoading(true)
         localStorage.clear()
         onLogout(true)
-        await new Promise(resolve => setTimeout(resolve, 0))
         setIsLoading(false)
-        navegate('/')
-        return;
+        return navegate('/')
     }
 
     // Get requests of Host

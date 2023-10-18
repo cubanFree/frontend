@@ -83,15 +83,15 @@ function MessageVar(
             const handleScroll = () => {
                 const isNotAtBottom = container.scrollTop + container.clientHeight + 20 >= container.scrollHeight;
                 setIsScrolledToBottom(!isNotAtBottom);
-              };
-          
-              // Agrega el event listener cuando el componente está montado
-              container.addEventListener('scroll', handleScroll);
-          
-              // Limpia el event listener cuando el componente se desmonta
-              return () => {
-                container.removeEventListener('scroll', handleScroll);
-              };
+            };
+        
+            // Agrega el event listener cuando el componente está montado
+            container.addEventListener('scroll', handleScroll);
+        
+            // Limpia el event listener cuando el componente se desmonta
+            return () => {
+            container.removeEventListener('scroll', handleScroll);
+            };
         }
     }, [chats]);
 

@@ -38,7 +38,7 @@ function FriendRequest({id, isRefresh, onRefresh = f => f}) {
             console.error('Error al eliminar la solicitud :(', err);
         })
 
-        return;
+        return null;
     }
 
     // accept request recived
@@ -69,7 +69,7 @@ function FriendRequest({id, isRefresh, onRefresh = f => f}) {
             console.error('Error al agregar contacto :(', err);
         })
 
-        return;
+        return null;
     }
 
     // loop requests received
