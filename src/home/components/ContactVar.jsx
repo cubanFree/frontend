@@ -64,6 +64,8 @@ function ContactVar(
         } catch (error) {
           toast.error(error.message);
         }
+
+        return;
     } 
 
     // Send invitation
@@ -92,6 +94,8 @@ function ContactVar(
             .catch(error => {
                 console.error('Error en el envio de solucitud :(', error);
             })
+
+        return;
     }
 
     // Cancel invitation
@@ -119,6 +123,8 @@ function ContactVar(
             .catch(error => {
                 console.error('Error al cancelar la solicitud :(', error);
             })
+
+        return;
     }
 
     // Loop contacts
@@ -134,13 +140,14 @@ function ContactVar(
             onOpenChat(true)
             await new Promise(resolve => setTimeout(resolve, 0));
             OpenChat({id, containerRef, onChat})
-            
+
+            return;
         }
 
         return (
             <React.Fragment key={idContact}>
                 <div 
-                    className='w-full flex justify-start items-center font-semibold hover:bg-gray-600 rounded-md cursor-pointer py-2'
+                    className='w-full flex justify-between items-center font-semibold hover:bg-gray-600 rounded-md cursor-pointer py-2'
                     onClick={(e) => onClickContact(e)}>
                         <User   
                             name={username}
@@ -259,7 +266,9 @@ function ContactVar(
         </div>
         <div className='flex flex-col mt-1'>
             <ScrollShadow 
-                hideScrollBar>
+                hideScrollBar
+                className='h-[55vh] overflow-y-scroll'
+                isEnabled={false}>
                     {/* if filteredContacts is empty, show Not contacts */}
                     {filteredContacts.length === 0
                         ? isLoading 

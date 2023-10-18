@@ -47,6 +47,8 @@ export async function OpenChat(
     } catch (error) {
         console.error('Error en el fetch OpenChat :(', error);
     }
+
+    return;
 }
 
 // scroll down function
@@ -54,6 +56,8 @@ export async function ScrollDown ({containerRef}) {
   if (containerRef.current) {
     await containerRef.current.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'smooth' })
   }
+
+  return;
 }
 
 function ChatScreen() {

@@ -67,6 +67,8 @@ function Header() {
         } catch (error) {
             console.error('Error en el registro :(', error);
         }
+
+        return;
     }
 
     const signIn = async (event) => {
@@ -103,6 +105,8 @@ function Header() {
                 setUsername('')
                 setIsLoading(false)
             });
+
+        return;
     }
 
     // Función asincrónica para simular el evento de presionar una tecla

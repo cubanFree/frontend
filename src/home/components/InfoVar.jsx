@@ -25,6 +25,7 @@ function InfoVar({id, username, isRefresh, isOpenChat, onState = f => f, onLogou
         await new Promise(resolve => setTimeout(resolve, 0))
         setIsLoading(false)
         navegate('/')
+        return;
     }
 
     // Get requests of Host

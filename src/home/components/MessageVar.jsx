@@ -64,6 +64,8 @@ function MessageVar(
         } catch (error) {
           console.error('Error en el fetch :(', error);
         }
+
+        return;
     };      
 
     // event listener on enter
