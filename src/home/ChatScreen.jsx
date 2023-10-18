@@ -7,7 +7,7 @@ import {toast, Toaster} from 'react-hot-toast';
 import FriendRequest from './components/FriendRequest';
 import LoadingVar from './LoadingVar';
 
-const URL_TARGET = 'http://localhost:5000'
+const URL_TARGET = 'https://chats-backend-api.vercel.app'
 
 // open chat function
 export async function OpenChat(

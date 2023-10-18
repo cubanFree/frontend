@@ -6,7 +6,7 @@ import { Toaster, toast } from 'react-hot-toast';
 import { v4 as uuid } from 'uuid';
 import avatarDefault from "../../assets/avatar.jpg";
 
-const URL_TARGET = 'http://localhost:5000'
+const URL_TARGET = 'https://chats-backend-api.vercel.app'
 
 function FriendRequest({id, isRefresh, onRefresh = f => f}) {
 

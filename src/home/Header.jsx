@@ -17,7 +17,7 @@ import { Toaster, toast } from 'react-hot-toast';
 import image from '../assets/fondox.png'
 import LoadingVar from './LoadingVar';
 
-const URL_TARGET = 'http://localhost:5000'
+const URL_TARGET = 'https://chats-backend-api.vercel.app'
 
 const Logo = () => {
     return (

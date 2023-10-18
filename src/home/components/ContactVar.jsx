@@ -6,7 +6,7 @@ import { OpenChat } from '../ChatScreen'
 import LoadingVar from '../LoadingVar'
 import avatarDefault from '../../assets/avatar.jpg'
 
-const URL_TARGET = 'http://localhost:5000'
+const URL_TARGET = 'https://chats-backend-api.vercel.app'
 
 function ContactVar(
         {
@@ -228,9 +228,6 @@ function ContactVar(
     // Refresh
     useEffect(() => {
         setUserOnChats(null)
-        setTimeout(() => {
-            toast.success('Refreshed contacts!')
-        }, 0)
     }, [isRefresh, searchContact === ''])
 
   return (

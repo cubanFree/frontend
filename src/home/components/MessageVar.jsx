@@ -8,7 +8,7 @@ import LoopMessage from './LoopMessage';
 import { OpenChat, ScrollDown } from '../ChatScreen';
 import avatarDefault from '../../assets/avatar.jpg';
 
-const URL_TARGET = 'http://localhost:5000'
+const URL_TARGET = 'https://chats-backend-api.vercel.app'
 
 function MessageVar(
         {
@@ -57,7 +57,6 @@ function MessageVar(
       
           if (data) {
             OpenChat({id, containerRef, onChat});
-            toast.success(data.message);
           } else {
             toast.error(data.message);
           }

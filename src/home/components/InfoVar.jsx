@@ -6,7 +6,7 @@ import { FaUserFriends } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import LoadingVar from '../LoadingVar';
 
-const URL_TARGET = 'http://localhost:5000'
+const URL_TARGET = 'https://chats-backend-api.vercel.app'
 
 function InfoVar({id, username, isRefresh, isOpenChat, onState = f => f, onLogout = f => f}) {
 
