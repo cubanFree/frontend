@@ -76,7 +76,6 @@ function Header() {
       
         // Loading
         setIsLoading(true)
-        await new Promise(resolve => setTimeout(resolve, 0));
 
         fetch(`${URL_TARGET}/login`, {
             method: 'POST',
@@ -94,17 +93,17 @@ function Header() {
                     localStorage.setItem('userId', data.id);
                     navegate('/chat')
                 } else {
-                    toast.error(data.message);
+                    toast.error(data.message)
                 }
             })
             .catch(error => {
                 console.error('Error en el registro :(', error);
             })
-            .finally(() => {
-                setPassword('')
-                setUsername('')
-                setIsLoading(false)
-            });
+
+        await new Promise(resolve => setTimeout(resolve, 0));
+        setPassword('')
+        setUsername('')
+        setIsLoading(false)
 
         return;
     }
