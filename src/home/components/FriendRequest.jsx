@@ -29,7 +29,9 @@ function FriendRequest({id, isRefresh, onRefresh = f => f}) {
         .then(data => {
             if(data) {
                 onRefresh(!isRefresh)
-                toast.success(data.message);
+                setTimeout(() => {
+                    toast.success(data.message);
+                }, 0)
             } else {
                 toast.error(data.message);
             }
@@ -60,7 +62,9 @@ function FriendRequest({id, isRefresh, onRefresh = f => f}) {
         .then(data => {
             if(data) {
                 onRefresh(!isRefresh)
-                toast.success(data.message);
+                setTimeout(() => {
+                    toast.success(data.message);
+                }, 0)
             } else {
                 toast.error(data.message);
             }
@@ -116,11 +120,6 @@ function FriendRequest({id, isRefresh, onRefresh = f => f}) {
             console.error('Error en el Server :(', error);
         })
     }, [id, isRefresh])
-
-    // Refresh
-    React.useEffect(() => {
-        toast.success('Refreshed requests!')
-    }, [isRefresh])
 
   return (
     <div className='bg-gray-800 text-gray-300 col-4 h-[100vh] p-4 flex flex-col gap-4 rounded-tl-2xl border-r-1 border-gray-600'>

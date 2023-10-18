@@ -25,6 +25,7 @@ function MessageVar(
 
     const [writeMessage, setWriteMessage] = React.useState('');
     const [isScrolledToBottom, setIsScrolledToBottom] = React.useState(false);
+    const [sendingMessage, setSendingMessage] = React.useState(false);
 
     const prevDateRef = React.useRef(null);
 
@@ -36,6 +37,8 @@ function MessageVar(
           toast.error('Write a message!');
           return;
         }
+
+        setSendingMessage(true);
       
         try {
           const response = await fetch(`${URL_TARGET}/send-message/${id}`, {
@@ -56,8 +59,9 @@ function MessageVar(
           const data = await response.json();
       
           if (data) {
-            OpenChat({id, containerRef, onChat});
-            toast.success(data.message);
+            setTimeout(() => {
+                OpenChat({id, containerRef, onChat});
+            }, 0)
           } else {
             toast.error(data.message);
           }
@@ -65,7 +69,9 @@ function MessageVar(
           console.error('Error en el fetch :(', error);
         }
 
-        return;
+        setSendingMessage(false);
+
+        return null;
     };      
 
     // event listener on enter
@@ -215,7 +221,7 @@ function MessageVar(
         {/* Footer */}
         <div className={'bg-gray-800 p-3 pe-0 min-h-[5rem] border-t-1 border-gray-600 flex z-10 sticky bottom-0 ' + (username === '' ? ' hidden' : '')}>
             <Input 
-                isDisabled={!username} 
+                isDisabled={sendingMessage} 
                 value={writeMessage} 
                 isClearable 
                 fullWidth={true}

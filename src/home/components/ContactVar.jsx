@@ -228,9 +228,6 @@ function ContactVar(
     // Refresh
     useEffect(() => {
         setUserOnChats(null)
-        setTimeout(() => {
-            toast.success('Refreshed contacts!')
-        }, 0)
     }, [isRefresh, searchContact === ''])
 
   return (
